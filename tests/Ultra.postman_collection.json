@@ -1,0 +1,618 @@
+{
+	"info": {
+		"_postman_id": "47caae51-6cfe-4afb-a171-7745150c7289",
+		"name": "Ultra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Retrieve All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for retrieving a user\r",
+							"pm.test('Retrieve User - Status code is 200', function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"    pm.expect(jsonData).to.have.length.above(0);\r",
+							"\r",
+							"    jsonData.forEach(function (item) {\r",
+							"        pm.expect(item).to.be.an('object');\r",
+							"        pm.expect(item).to.have.property('id').that.is.a('number');\r",
+							"        pm.expect(item).to.have.property('name').that.is.a('string');\r",
+							"        pm.expect(item).to.have.property('email').that.is.a('string');\r",
+							"        pm.expect(item).to.have.property('gender').that.is.a('string');\r",
+							"        pm.expect(item).to.have.property('status').that.is.a('string');\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for creating a user\r",
+							"pm.test('Create User - Status code is 201', function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData).to.have.property('id').that.is.a('number');\r",
+							"    pm.expect(jsonData).to.have.property('name').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('email').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('gender').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('status').that.is.a('string');\r",
+							"});\r",
+							"\r",
+							"// Extract and store the information\r",
+							"const user = pm.response.json();\r",
+							"\r",
+							"pm.environment.set('userId', user.id);\r",
+							"pm.environment.set('userName', user.name);\r",
+							"pm.environment.set('userEmail', user.email);\r",
+							"pm.environment.set('userGender', user.gender);\r",
+							"pm.environment.set('userStatus', user.status);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"timestampMs\", new Date().getTime());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"User {{timestampMs}}\",\r\n    \"email\": \"user_{{timestampMs}}@example.com\",\r\n    \"gender\": \"male\",\r\n    \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for retrieving a user\r",
+							"pm.test('Retrieve User - Status code is 200', function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData).to.have.property('id').that.is.a('number');\r",
+							"    pm.expect(jsonData).to.have.property('name').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('email').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('gender').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('status').that.is.a('string');\r",
+							"});\r",
+							"\r",
+							"// Verify the user details\r",
+							"pm.test('Retrieve User - Verify user details', function () {\r",
+							"  const user = pm.response.json();\r",
+							"  pm.expect(user.name).to.equal(`${pm.environment.get('userName')}`);\r",
+							"  pm.expect(user.email).to.equal(`${pm.environment.get('userEmail')}`);\r",
+							"  pm.expect(user.gender).to.equal(`${pm.environment.get('userGender')}`);\r",
+							"  pm.expect(user.status).to.equal(`${pm.environment.get('userStatus')}`);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Details",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"timestampMs\", new Date().getTime());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for updating a user\r",
+							"pm.test('Update User - Status code is 200', function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData).to.have.property('id').that.is.a('number');\r",
+							"    pm.expect(jsonData).to.have.property('name').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('email').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('gender').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('status').that.is.a('string');\r",
+							"});\r",
+							"\r",
+							"// Extract and store the updated information\r",
+							"const newUserName = pm.response.json().name;\r",
+							"pm.environment.set('newUserName', newUserName)\r",
+							"\r",
+							"const newUserEmail = pm.response.json().email;\r",
+							"pm.environment.set('newUserEmail', newUserEmail);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"User {{timestampMs}}\",\r\n    \"email\": \"user_{{timestampMs}}@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Updated User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for retrieving the updated user\r",
+							"pm.test('Retrieve Updated User - Status code is 200', function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData).to.have.property('id').that.is.a('number');\r",
+							"    pm.expect(jsonData).to.have.property('name').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('email').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('gender').that.is.a('string');\r",
+							"    pm.expect(jsonData).to.have.property('status').that.is.a('string');\r",
+							"});\r",
+							"\r",
+							"// Verify the updated user details\r",
+							"pm.test('Retrieve Updated User - Verify user details', function () {\r",
+							"  const user = pm.response.json();\r",
+							"  pm.expect(user.name).to.equal(`${pm.environment.get('newUserName')}`);\r",
+							"  pm.expect(user.email).to.equal(`${pm.environment.get('newUserEmail')}`);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for deleting a user\r",
+							"pm.test('Delete User - Status code is 204', function () {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm User Deletion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for confirming user deletion\r",
+							"pm.test('Confirm User Deletion - Status code is 404', function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('object');\r",
+							"    pm.expect(jsonData).to.have.property('message').that.is.a('string');\r",
+							"    pm.expect(jsonData.message).to.equal('Resource not found')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{userId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Unprocessable Entity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate Unprocessable Entity\", function() {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"Validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"    pm.expect(jsonData).to.have.length.above(0);\r",
+							"\r",
+							"    jsonData.forEach(function (item) {\r",
+							"        pm.expect(item).to.be.an('object');\r",
+							"        pm.expect(item).to.have.property('field').that.is.a('string');\r",
+							"        pm.expect(item).to.have.property('message').that.is.a('string');        \r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"invalid_key\": \"value\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Invalid Gender",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assert the response status code for creating a user\r",
+							"pm.test('Create User - Status code is 201', function () {\r",
+							"    pm.response.to.have.status(422);\r",
+							"});\r",
+							"\r",
+							"//validate JSON scheme\r",
+							"pm.test(\"Validate JSON scheme\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"    pm.expect(jsonData).to.have.length(1);\r",
+							"\r",
+							"    jsonData.forEach(function (item) {\r",
+							"        pm.expect(item).to.be.an('object');\r",
+							"        pm.expect(item).to.have.property('field').that.is.a('string');\r",
+							"        pm.expect(item).to.have.property('message').that.is.a('string').and.contain(\"can't be blank, can be male of female\")\r",
+							"        \r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"timestampMs\", new Date().getTime());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"User {{timestampMs}}\",\r\n    \"email\": \"user_{{timestampMs}}@example.com\",\r\n    \"gender\": \"Invalid Information\",\r\n    \"status\": \"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
