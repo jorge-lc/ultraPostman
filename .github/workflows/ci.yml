@@ -1,19 +1,16 @@
-name: CI
+name: Run Newman Tests
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  run_tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
@@ -25,4 +22,13 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: npm run test
+
+      - name: Check test result
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Tests failed. Failing the workflow..."
+            exit 1
+          else
+            echo "Tests passed. Continuing the workflow..."
+          fi
