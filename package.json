@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gorestCollection": "npx newman run tests/Ultra.postman_collection.json -e environments/UltraPostman.postman_environment.json"
   },
   "author": "Jorge Carabajal",
   "license": "ISC",
