@@ -1,5 +1,5 @@
 # ultraPostman
-ultraPostman is a API tool designed for testing purpose of the https://gorest.co.in/public/v2/users API service
+ultraPostman is a API tool designed for testing purpose of the https://gorest.co.in/public/v2/users API service. It also includes an optional Cypress framework that can run the same scenarios.
 
 ## Installation
 To use ultraPostman, follow these steps:
@@ -13,9 +13,13 @@ git clone https://github.com/jorge-lc/ultraPostman.git
 cd ultraPostman
 npm install
 ```
-3. Run the testing collection:
+3. Run the testing collection from Postman/Newman:
 ```
 npm run gorestCollection
+```
+Run the testing collection from Cypress:
+```
+npm run cypressAPITests
 ```
 ## Usage
 Once you have ultraPostman installed, follow these steps to start testing APIs:

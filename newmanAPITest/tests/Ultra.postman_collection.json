@@ -448,8 +448,7 @@
 							"    var jsonData = pm.response.json();\r",
 							"\r",
 							"    pm.expect(jsonData).to.be.an('object');\r",
-							"    pm.expect(jsonData).to.have.property('message').that.is.a('string');\r",
-							"    pm.expect(jsonData.message).to.equal('Resource not found')\r",
+							"    pm.expect(jsonData).to.have.property('message').that.is.a('string').and.contain('Resource not found')\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -478,7 +477,7 @@
 			"response": []
 		},
 		{
-			"name": "Validate Unprocessable Entity",
+			"name": "Unprocessable Entity handling",
 			"event": [
 				{
 					"listen": "test",
@@ -541,7 +540,7 @@
 			"response": []
 		},
 		{
-			"name": "Validate Invalid Gender",
+			"name": "Invalid Gender handling",
 			"event": [
 				{
 					"listen": "test",

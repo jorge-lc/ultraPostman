@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gorestCollection": "npx newman run tests/Ultra.postman_collection.json -e environments/UltraPostman.postman_environment.json"
+    "gorestCollection": "npx newman run newmanAPITest/tests/Ultra.postman_collection.json -e newmanAPITest/environments/UltraPostman.postman_environment.json",
+    "cypressAPITests": "npx cypress run --headless --browser chrome 'cypress/e2e/APITesting/gorestAPITesting.cy.js'"
   },
   "author": "Jorge Carabajal",
   "license": "ISC",
   "dependencies": {
     "newman": "^5.3.2"
+  },
+  "devDependencies": {
+    "cypress": "^12.12.0"
   }
 }
